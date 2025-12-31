@@ -1,10 +1,16 @@
 <script>
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRoute } from 'vue-router';
 import { mapActions, mapState } from 'pinia';
+import {useUiStore} from "@/stores/ui.js"
 //import { byPrefixAndName } from '@awesome.me/kit-KIT_CODE/icons';
 // import { fas, far, fad, fass, fasds, fak } from '@awesome.me/kit-KIT_CODE/icons'
 
 export default {
+   setup()
+   {
+    const ui = useUiStore();
+    return {ui}
+   },
     data() {
         return {
             rami: {
@@ -24,13 +30,7 @@ export default {
     },
     methods: {
         aperturaNav() {
-            console.log("cliccato");
-            if (this.menuVisible) {
-                this.menuVisible = false;
-            }
-            else {
-                this.menuVisible = true;
-            }
+             this.ui.aperturaNavbar()
         },
         toggleSubmenu(key) {
             console.log("cliccato submenu");
@@ -58,14 +58,20 @@ export default {
         </div>
     </nav>
     <!--menu a comparsa-->
-    <div class="menu" :class="{ visible: menuVisible }">
+    <div class="menu" :class="{ visible: ui.menuVisible }">
         <ul>
+            <li class="d-flex align-items-center" @click="toggleSubmenu('Home')">
+                <font-awesome-icon icon="fa-solid fa-house" />
+                    <span><RouterLink to="/">Home</RouterLink></span>
+               
+                
+            </li>
             <li class="d-flex align-items-center" @click="toggleSubmenu('gestioneUtenti')">
                 <font-awesome-icon icon="fa-solid fa-arrow-right" :class="{ rotated: rami.gestioneUtenti }" />
                 <span>Gestione Utenti</span>
             </li>
             <ul v-show="rami.gestioneUtenti" class="ms-4 mt-2">
-                <li><a href="#">Lista utenti</a></li>
+                <li><a><RouterLink to="/users">Lista utenti</RouterLink></a></li>
                 <li><a href="#">Aggiungi utente</a></li>
             </ul>
         
